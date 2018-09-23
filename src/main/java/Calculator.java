@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 /**
- * This is a simple calculator
+ * This is a simple sum calculator
  *
  * @author Evgeniy Busygin
  * @return sum of two numbers

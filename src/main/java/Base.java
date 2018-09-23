@@ -1,6 +1,10 @@
 import java.util.Scanner;
 
-//Created by Evgeniy Busygin on 19.09.2018.
+/**
+ * First step at learning Java/
+ *
+ * @author Evgeniy Busygin
+ */
 public class Base {
     public static void main(String[] args) {
         for (String arg : args) {
