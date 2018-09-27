@@ -16,8 +16,8 @@ public class Present {
         Double boxPrice = 0.0;
         for (Candy someCandy : box
         ) {
-            boxWeight += someCandy.getWeight();
-            boxPrice += someCandy.getPrice();
+            boxWeight += someCandy.getWeight(); // Вычисляется общий вес коробки
+            boxPrice += someCandy.getPrice(); // Вычисляется общая цена коробки
             System.out.println(someCandy.toString());
         }
         System.out.println("Total weight of a box: " + boxWeight);
