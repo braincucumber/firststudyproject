@@ -7,7 +7,7 @@ import NewYearPresent.*;
 
 public class Present {
     public static void main(String[] args) {
-        Jellybean jellybean1 = new Jellybean("Google", 15.99, 1.06, "Jelly");
+        Jellybean jellybean1 = new Jellybean("Google", 15.99, 1.6, "Jelly");
         Chocolate chocolate1 = new Chocolate("Alpen Gold", 5.50, 0.5, "20x20");
         Biscuit biscuit1 = new Biscuit("Tuc", 1.99, 2.0, 3);
         Donut donut1 = new Donut("DD", 9.99, 0.75, "Perfect");
