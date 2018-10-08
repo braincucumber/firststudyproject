@@ -1,4 +1,6 @@
-import NewYearPresent.*;
+package Gift;
+
+import Gift.NewYearPresent.*;
 
 /**
  * This program calculates total price and weight of a present box and shows all content of it.
