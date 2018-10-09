@@ -1,4 +1,4 @@
-package Gift.NewYearPresent;
+package Lesson_4.Gift.NewYearPresent;
 
 public class Chocolate extends Candy {
     private String size;

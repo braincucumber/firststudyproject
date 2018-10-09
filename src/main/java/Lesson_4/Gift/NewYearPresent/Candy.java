@@ -1,4 +1,4 @@
-package Gift.NewYearPresent;
+package Lesson_4.Gift.NewYearPresent;
 
 public abstract class Candy {
     private String brand;

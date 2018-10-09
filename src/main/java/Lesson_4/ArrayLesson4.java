@@ -1,3 +1,5 @@
+package Lesson_4;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
