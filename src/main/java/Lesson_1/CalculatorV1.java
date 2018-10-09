@@ -1,3 +1,5 @@
+package Lesson_1;
+
 import java.util.Scanner;
 
 /**
@@ -6,7 +8,7 @@ import java.util.Scanner;
  * @author Evgeniy Busygin
  * @return sum of two numbers
  */
-public class Calculator {
+public class CalculatorV1 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите первое число:");
