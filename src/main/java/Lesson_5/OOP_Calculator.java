@@ -11,6 +11,7 @@ class Calculator {
         this.secondNumber = secondNumber;
     }
 
+    // Описываем операции
     double addition() {
         return firstNumber + secondNumber;
     }
@@ -32,11 +33,11 @@ public class OOP_Calculator {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter first number: ");
-        double firstNumber = scanner.nextDouble();
+        double firstNumber = scanner.nextDouble(); // Вводим первое число
         System.out.println("Enter operation: (+,-,*,/)");
-        String operation = scanner.next();
+        String operation = scanner.next(); // Вводим знак операции
         System.out.println("Enter second number: ");
-        double secondNumber = scanner.nextDouble();
+        double secondNumber = scanner.nextDouble(); // Вводим второе число
         double result = 0;
         Calculator calculator = new Calculator(firstNumber, secondNumber);
         {
