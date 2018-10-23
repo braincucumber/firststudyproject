@@ -40,7 +40,7 @@ public class OOPCalculatorWithExceptions {
         System.out.println("Enter second number: ");
         double secondNumber = scanner.nextDouble(); // Вводим второе число
         double result = 0;
-        try {
+        try { // Вводим механизм исключительных ситуаций
             Calculator calculator = new Calculator(firstNumber, secondNumber);
             {
                 switch (operation) {
@@ -63,9 +63,9 @@ public class OOPCalculatorWithExceptions {
             }
 
             System.out.println("Answer is: " + result);
-        } catch (ArithmeticException exceptionOne) {
-            System.out.println("Exception thrown: " + exceptionOne + "\n Cannot divide by zero");
-        } catch (InputMismatchException exceptionTwo) {
+        } catch (ArithmeticException exceptionOne) { // Отлавливаем арифметические исключения (деление на 0)
+            System.out.println("Exception thrown: " + exceptionOne + "\n Arithmetic exception");
+        } catch (InputMismatchException exceptionTwo) { // Отлавливаем некорректный ввод данных
             System.out.println("Exception thrown: " + exceptionTwo + "\n Input is not a double");
         }
     }
