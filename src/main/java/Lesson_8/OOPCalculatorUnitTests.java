@@ -1,4 +1,4 @@
-package Lesson_7;
+package Lesson_8;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -30,7 +30,7 @@ class Calculator {
     }
 }
 
-public class OOPCalculatorWithExceptions {
+public class OOPCalculatorUnitTests {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter first number: ");
@@ -64,9 +64,9 @@ public class OOPCalculatorWithExceptions {
 
             System.out.println("Answer is: " + result);
         } catch (ArithmeticException exceptionOne) { // Отлавливаем арифметические исключения (деление на 0)
-            System.out.println("Exception thrown: " + exceptionOne + "\n Arithmetic exception");
+            System.out.println("Arithmetic exception");
         } catch (InputMismatchException exceptionTwo) { // Отлавливаем некорректный ввод данных
-            System.out.println("Exception thrown: " + exceptionTwo + "\n Input is not a double");
+            System.out.println("Input is not a double");
         }
     }
 }
