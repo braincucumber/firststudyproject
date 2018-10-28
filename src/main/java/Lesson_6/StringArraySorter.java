@@ -11,7 +11,7 @@ public class StringArraySorter {
     public static void main(String[] args) {
         List<String> wordArray = new ArrayList<>();
         try {
-            for (String file : Files.readAllLines(Paths.get("E:\\IntelliJ IDEA Community Edition 2018.2.4\\IdeaProjects\\src\\main\\java\\Lesson_6\\words.txt"))) { // Читаем файл
+            for (String file : Files.readAllLines(Paths.get("src\\main\\java\\Lesson_6\\words.txt"))) { // Читаем файл
                 for (String word : file.split("\\s+")) { // Преобразуем файл в массив из слов
                     wordArray.add(word);
                 }

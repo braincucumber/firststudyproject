@@ -26,6 +26,9 @@ class Calculator {
     }
 
     double division() {
+        if (secondNumber == 0) {
+            throw new ArithmeticException("Arithmetic exception");
+        }
         return firstNumber / secondNumber;
     }
 }
@@ -63,11 +66,8 @@ public class OOPCalculatorUnitTests {
             }
 
             System.out.println("Answer is: " + result);
-        } catch (ArithmeticException exceptionOne) { // Отлавливаем арифметические исключения (деление на 0)
-            System.out.println("Arithmetic exception");
         } catch (InputMismatchException exceptionTwo) { // Отлавливаем некорректный ввод данных
-            System.out.println("Input is not a double");
+            System.out.println("Exception thrown: " + exceptionTwo + "\n Input is not a double");
         }
     }
 }
-
