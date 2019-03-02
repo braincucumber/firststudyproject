@@ -55,7 +55,7 @@ class CalculatorTest {
     }
 
     @Test
-    public void DivisionByZero() {
+    void DivisionByZero() {
         try {
             Calculator calculator = new Calculator(0, 0);
             double result = calculator.division();
