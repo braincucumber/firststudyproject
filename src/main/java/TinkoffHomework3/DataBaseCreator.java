@@ -28,7 +28,7 @@ public class DataBaseCreator {
     public static void main(String[] args) {
         try {
             //Создаем файл и лист Excel, указываем путь к нему
-            String excelOutputFilePath = "E:\\PersonalData.xls";
+            String excelOutputFilePath = "PersonalData.xls";
             HSSFWorkbook userDataWorkbook = new HSSFWorkbook();
             HSSFSheet userDataSheet = userDataWorkbook.createSheet("FirstSheet");
             Random random = new Random();
@@ -52,7 +52,7 @@ public class DataBaseCreator {
             DataReader dataReader = new DataReader("");
             BirthdateGenerator birthdateGenerator = new BirthdateGenerator();
             //Создаем файл и таблицу в PDF, указываем путь к нему
-            String pdfOutputFilePath = "E:\\PersonalData.pdf";
+            String pdfOutputFilePath = "PersonalData.pdf";
             Document pdfDocument = new Document(PageSize.A3.rotate());
             //Задаем шрифт, поддерживающий кириллицу
             BaseFont bf = BaseFont.createFont("c:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
