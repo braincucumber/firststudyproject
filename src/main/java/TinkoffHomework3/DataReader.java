@@ -16,14 +16,15 @@ class DataReader {
     String getData(String inputFilePath) {//На вход принимаем имя файла
         List<String> dataList = new ArrayList<>();
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(inputFilePath);
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(inputFilePath);//Открываем стрим
             assert inputStream != null;
             BufferedReader dataReader = new BufferedReader(new InputStreamReader(inputStream, "windows-1251"));//Устанавливаем кодировку
             String readData;
             while ((readData = dataReader.readLine()) != null) {
                 dataList.add(readData);// Добавляем все строки из файла в коллекцию
             }
-            inputStream.close();
+            inputStream.close();//Закрываем стрим
+            //Отлавливаем исключения
         } catch (
                 FileNotFoundException e) {
             System.out.println("File not found.");

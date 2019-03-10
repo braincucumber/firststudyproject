@@ -27,19 +27,18 @@ import java.util.*;
 public class DataBaseCreator {
     public static void main(String[] args) {
         try {
-            //Создаем файл и лист Excel, указываем путь к нему
-            String excelOutputFilePath = "PersonalData.xls";
-            HSSFWorkbook userDataWorkbook = new HSSFWorkbook();
-            HSSFSheet userDataSheet = userDataWorkbook.createSheet("FirstSheet");
+            String excelOutputFilePath = "PersonalData.xls";//Задаем путь файла Excel
+            HSSFWorkbook userDataWorkbook = new HSSFWorkbook();//Создаем книгу
+            HSSFSheet userDataSheet = userDataWorkbook.createSheet("FirstSheet");//Создаем лист
             Random random = new Random();
-            int minPostCode = 100000;
-            int maxPostCode = 200000;
+            int minPostCode = 100000;//Минимальное значение индекса из задания
+            int maxPostCode = 200000;//Максимальное значение индекса из задания
             int userAge;
             String innValue;
             int postCodeValue;
             int houseNumber;
             int apartmentNumber;
-            int userQuantity = random.nextInt(30);
+            int userQuantity = random.nextInt(30);//Устанавливаем максимальное значение случайного числа пользьзователей
             Date birthDate;
             //Создаем массивы с названиями полей шапки и названиями файлов с данными
             String[] userDataHeader = new String[]{"Имя", "Фамилия", "Отчество", "Возраст", "Пол", "Дата рождения", "ИНН", "Почтовый индекс", "Страна", "Область", "Город", "Улица", "Дом", "Квартира"};
@@ -60,31 +59,33 @@ public class DataBaseCreator {
             PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfOutputFilePath));
             pdfDocument.open();
             PdfPTable userDataPdfTable = new PdfPTable(userDataHeader.length);
-            userDataPdfTable.setWidthPercentage(100);
+            userDataPdfTable.setWidthPercentage(100);//Задаем максимальную ширину полей
 
             String apiUrl = "https://randomapi.com/api/?key=DRVQ-GMHS-SZW5-5CF8&ref=6qqg94zo";
+            //Создаем подключение
             HttpURLConnection connectionCheck;
             connectionCheck = (HttpURLConnection) new URL(apiUrl).openConnection();
-            connectionCheck.connect();
-            if (HttpURLConnection.HTTP_OK == connectionCheck.getResponseCode()) {
+            connectionCheck.connect();//Подключаемся
+            if (HttpURLConnection.HTTP_OK == connectionCheck.getResponseCode()) {//Проверяем код ответа: 200 - идем дальше !=200 - Выводим сообщение об ошибке и используем код из предыдущего задания
                 try {
                     HttpURLConnection connection;
-                    List[] apiUserData = new List[userQuantity];
+                    List[] apiUserData = new List[userQuantity];//Создаем лист массивов для хранения данных пользователей
                     for (int count = 0; count < userQuantity; count++) {
-                        connection = (HttpURLConnection) new URL(apiUrl).openConnection();
+                        connection = (HttpURLConnection) new URL(apiUrl).openConnection();//Открываем подключение для получения данных клиента
                         connection.setRequestMethod("GET");
                         connection.connect();
                         StringBuilder sb = new StringBuilder();
 
-                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));//Читаем входящий стрим
                         String line;
                         while ((line = in.readLine()) != null) {
                             sb.append(line);
                         }
-                        String apiResults = sb.toString();
-                        JsonObject jsonObject = new JsonParser().parse(apiResults).getAsJsonObject();
-                        JsonArray jsonArray = jsonObject.getAsJsonArray("results");
-                        ArrayList arrayList = new ArrayList<>();
+                        String apiResults = sb.toString();//Собираем полученные строки в одну
+                        JsonObject jsonObject = new JsonParser().parse(apiResults).getAsJsonObject();//Парсим строку в JSON объект
+                        JsonArray jsonArray = jsonObject.getAsJsonArray("results");//Извлекаем из JSON объекта массив "results"
+                        ArrayList<String> arrayList = new ArrayList<>();
+                        //Считываем элементы JSON массива и заносим их в листовой массив
                         for (JsonElement element : jsonArray) {
                             JsonObject resultsObj = element.getAsJsonObject();
                             JsonElement apiFirstName = resultsObj.get("firstName");
@@ -116,11 +117,10 @@ public class DataBaseCreator {
                             arrayList.add(apiHouseNumber.getAsString());
                             arrayList.add(apiApartmentNumber.getAsString());
                         }
-                        apiUserData[count] = arrayList;
+                        apiUserData[count] = arrayList;//Вносим полученный листовой массив в лист массивов
                     }
-                    HSSFRow headRows = userDataSheet.createRow(0);
+                    HSSFRow headRows = userDataSheet.createRow(0);//Создаем шапку таблицы
                     for (String header : userDataHeader) {
-                        //Для Excel файла
                         headRows.createCell(Arrays.asList(userDataHeader).indexOf(header)).setCellValue(header);
                     }
                     //Заполняем тело таблицы
@@ -128,10 +128,10 @@ public class DataBaseCreator {
                         HSSFRow bodyRows = userDataSheet.createRow(count + 1);
                         for (int i = 0; i < 14; i++) {
                             bodyRows.createCell(i).setCellValue(String.valueOf(apiUserData[count].get(i)));
-                            userDataSheet.autoSizeColumn(i);
+                            userDataSheet.autoSizeColumn(i);//Автоматически расширяем колонки до нужного размера
                         }
                     }
-                    //Пишем Excel
+                    //Пишем Excel файл
                     FileOutputStream fileOut = new FileOutputStream(excelOutputFilePath);
                     userDataWorkbook.write(fileOut);
                     fileOut.close();
@@ -139,12 +139,13 @@ public class DataBaseCreator {
                     System.out.println("Excel файл создан. Путь: " + excelOutputFilePath);
 
                 } catch (Throwable cause) {
-                    cause.printStackTrace();
+                    cause.printStackTrace();//Ловим исключения
                 } finally {
-                    connectionCheck.disconnect();
+                    connectionCheck.disconnect();//Закрываем подключение
                 }
             } else {
-                System.out.println("Fail: " + connectionCheck.getResponseCode() + ", " + connectionCheck.getResponseMessage());
+                System.out.println("Fail: " + connectionCheck.getResponseCode() + ", " + connectionCheck.getResponseMessage());//Если код ответа !=200 - выводим код и текст ошибки и используем код из предыдущего задания
+
                 // Создаем шапку таблицы
                 HSSFRow headRows = userDataSheet.createRow(0);
 
@@ -203,6 +204,7 @@ public class DataBaseCreator {
                             PdfPCell cellValue = new PdfPCell(new Paragraph(value, cyrillicFont));
                             userDataPdfTable.addCell(cellValue);
                         }
+                        //Устанавливаем возраст
                         bodyRows.createCell(3).setCellValue(userAge);
                         PdfPCell cellValue = new PdfPCell(new Paragraph(String.valueOf(userAge), cyrillicFont));
                         userDataPdfTable.addCell(cellValue);
@@ -212,6 +214,7 @@ public class DataBaseCreator {
                         cellValue = new PdfPCell(new Paragraph("Женский", cyrillicFont));
                         userDataPdfTable.addCell(cellValue);
 
+                        //Устанавливаем дату рождения
                         Cell birthDateCell = bodyRows.createCell(5);
                         birthDateCell.setCellValue(dateFormat.format(birthDate));
                         cellValue = new PdfPCell(new Paragraph(dateFormat.format(birthDate), cyrillicFont));
@@ -257,17 +260,16 @@ public class DataBaseCreator {
                 pdfDocument.close();
                 System.out.println("PDF файл создан. Путь: " + pdfOutputFilePath);
 
+
                 //Пишем Excel
                 FileOutputStream fileOut = new FileOutputStream(excelOutputFilePath);
                 userDataWorkbook.write(fileOut);
                 fileOut.close();
                 userDataWorkbook.close();
                 System.out.println("Excel файл создан. Путь: " + excelOutputFilePath);
-
-
             }
-        } catch (Exception exception) {
-            System.out.println(exception);
+        } catch (Throwable cause) {
+            cause.printStackTrace();//Ловим исключения
         }
     }
 }

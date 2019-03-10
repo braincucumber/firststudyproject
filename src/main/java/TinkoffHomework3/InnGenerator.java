@@ -11,7 +11,7 @@ class InnGenerator {
     }
 
     String generateInn() {
-        innNumber = "77"; // Код региона из задания
+        innNumber = "77"; //Инн по условиям задачи должен начинаться с кода региона 77 и дополняться случайными цифрами
         int[] innNumberArray = new int[8];
         // Набираем массив из 9 случайных цифр
         for (int i = 0; i < innNumberArray.length; i++) {
@@ -28,6 +28,7 @@ class InnGenerator {
         if (secondINNControlNumber == 10) {
             secondINNControlNumber = 0;
         }
+        //Конкатинация в единую строку
         innNumber += firstINNControlNumber + "" + secondINNControlNumber;
         return innNumber;
     }
