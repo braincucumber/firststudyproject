@@ -54,8 +54,10 @@ public class DataBaseCreator {
             String pdfOutputFilePath = "PersonalData.pdf";
             Document pdfDocument = new Document(PageSize.A3.rotate());
             //Задаем шрифт, поддерживающий кириллицу
-            BaseFont bf = BaseFont.createFont("c:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            Font cyrillicFont = new Font(bf, 11);
+            Font font = FontFactory.getFont("/fonts/arial.ttf",
+                    BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 0.8f, Font.NORMAL, BaseColor.BLACK);
+            BaseFont baseFont = font.getBaseFont();
+            Font cyrillicFont = new Font(baseFont, 11);
             PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfOutputFilePath));
             pdfDocument.open();
             PdfPTable userDataPdfTable = new PdfPTable(userDataHeader.length);
@@ -128,7 +130,7 @@ public class DataBaseCreator {
                         HSSFRow bodyRows = userDataSheet.createRow(count + 1);
                         for (int i = 0; i < 14; i++) {
                             bodyRows.createCell(i).setCellValue(String.valueOf(apiUserData[count].get(i)));
-                            userDataSheet.autoSizeColumn(i);//Автоматически расширяем колонки до нужного размера
+                            userDataSheet.autoSizeColumn(i);
                         }
                     }
                     //Пишем Excel файл
@@ -267,8 +269,10 @@ public class DataBaseCreator {
                 fileOut.close();
                 userDataWorkbook.close();
                 System.out.println("Excel файл создан. Путь: " + excelOutputFilePath);
+
+
             }
-        } catch (Throwable cause) {
+        }  catch (Throwable cause) {
             cause.printStackTrace();//Ловим исключения
         }
     }
