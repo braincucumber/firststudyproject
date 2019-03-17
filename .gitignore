@@ -1,5 +1,5 @@
 # IntellijIdea files
 *.iml
 .idea/
-out
+out/
 src/main/resources/database.txt
