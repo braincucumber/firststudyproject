@@ -18,19 +18,14 @@ import java.util.Arrays;
 import java.util.List;
 
 class ApiDataGenerator {
-    private int userQuantity;
 
-    ApiDataGenerator(int userQuantity) {
-        this.userQuantity = userQuantity;
-    }
-
-    void getApiData(int userQuantity) {
+    void getApiData(int userQuantity, String apiUrl) {
         SQLDatabaseCreator sqlDatabaseCreator = new SQLDatabaseCreator();
         String excelOutputFilePath = "PersonalData.xls";//Задаем путь файла Excel
         HSSFWorkbook userDataWorkbook = new HSSFWorkbook();//Создаем книгу
-        HSSFSheet userDataSheet = userDataWorkbook.createSheet("FirstSheet");
+        HSSFSheet userDataSheet = userDataWorkbook.createSheet("FirstSheet");//Создаем лист
         String[] userDataHeader = new String[]{"Имя", "Фамилия", "Отчество", "Возраст", "Пол", "Дата рождения", "ИНН", "Почтовый индекс", "Страна", "Область", "Город", "Улица", "Дом", "Квартира"};
-        String apiUrl = "https://randomapi.com/api/?key=DRVQ-GMHS-SZW5-5CF8&ref=6qqg94zo";
+        String[] apiElementsArray = new String[]{"firstName", "lastName", "patronymic", "age", "gender", "birthDate", "inn", "postCode", "country", "state", "city", "street", "houseNumber", "apartmentNumber"};
         //Создаем подключение
         try {
             HttpURLConnection connection;
@@ -52,39 +47,15 @@ class ApiDataGenerator {
                 //Считываем элементы JSON массива и заносим их в листовой массив
                 for (JsonElement element : jsonArray) {
                     JsonObject resultsObj = element.getAsJsonObject();
-                    JsonElement apiFirstName = resultsObj.get("firstName");
-                    JsonElement apiLastName = resultsObj.get("lastName");
-                    JsonElement apiPatronymic = resultsObj.get("patronymic");
-                    JsonElement apiAge = resultsObj.get("age");
-                    JsonElement apiGender = resultsObj.get("gender");
-                    JsonElement apiBirthDate = resultsObj.get("birthDate");
-                    JsonElement apiInn = resultsObj.get("inn");
-                    JsonElement apiPostCode = resultsObj.get("postCode");
-                    JsonElement apiCountry = resultsObj.get("country");
-                    JsonElement apiState = resultsObj.get("state");
-                    JsonElement apiCity = resultsObj.get("city");
-                    JsonElement apiStreet = resultsObj.get("street");
-                    JsonElement apiHouseNumber = resultsObj.get("houseNumber");
-                    JsonElement apiApartmentNumber = resultsObj.get("apartmentNumber");
-                    arrayList.add(apiFirstName.getAsString());
-                    arrayList.add(apiLastName.getAsString());
-                    arrayList.add(apiPatronymic.getAsString());
-                    arrayList.add(apiAge.getAsString());
-                    arrayList.add(apiGender.getAsString());
-                    arrayList.add(apiBirthDate.getAsString());
-                    arrayList.add(apiInn.getAsString());
-                    arrayList.add(apiPostCode.getAsString());
-                    arrayList.add(apiCountry.getAsString());
-                    arrayList.add(apiState.getAsString());
-                    arrayList.add(apiCity.getAsString());
-                    arrayList.add(apiStreet.getAsString());
-                    arrayList.add(apiHouseNumber.getAsString());
-                    arrayList.add(apiApartmentNumber.getAsString());
+                    for (String  arrayIterator : apiElementsArray) {
+                        JsonElement apiElement = resultsObj.get(arrayIterator);
+                        arrayList.add(apiElement.getAsString());
+                    }
                 }
-                sqlDatabaseCreator.dbData(arrayList);
-                System.out.println("Done...");
+                sqlDatabaseCreator.dbData(arrayList);//Добавляем полученные данные в БД
                 apiUserData[count] = arrayList;//Вносим полученный листовой массив в лист массивов
             }
+            System.out.println("Данные из API были добавлены в БД");
             HSSFRow headRows = userDataSheet.createRow(0);//Создаем шапку таблицы
             for (String header : userDataHeader) {
                 headRows.createCell(Arrays.asList(userDataHeader).indexOf(header)).setCellValue(header);

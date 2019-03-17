@@ -17,11 +17,6 @@ import java.util.Date;
 import java.util.Random;
 
 class FileDataGenerator {
-    private int userQuantity;
-
-    FileDataGenerator(int userQuantity) {
-        this.userQuantity = userQuantity;
-    }
 
     void getFileData(int userQuantity) {
         try {
@@ -31,35 +26,34 @@ class FileDataGenerator {
             Random random = new Random();
             int minPostCode = 100000;//Минимальное значение индекса из задания
             int maxPostCode = 200000;//Максимальное значение индекса из задания
-            int userAge;
-            String innValue;
-            int postCodeValue;
-            int houseNumber;
-            int apartmentNumber;
-            Date birthDate;
+
             //Создаем массивы с названиями полей шапки и названиями файлов с данными
             String[] userDataHeader = new String[]{"Имя", "Фамилия", "Отчество", "Возраст", "Пол", "Дата рождения", "ИНН", "Почтовый индекс", "Страна", "Область", "Город", "Улица", "Дом", "Квартира"};
             String[] maleUserData = new String[]{"male_names.txt", "male_surnames.txt", "male_patronymic.txt"};
             String[] femaleUserData = new String[]{"female_names.txt", "female_surnames.txt", "female_patronymic.txt"};
             String[] userAddressData = new String[]{"country.txt", "region.txt", "city.txt", "street.txt"};
+
             //Задаем формат даты
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
             InnGenerator innGenerator = new InnGenerator("");
-            DataReader dataReader = new DataReader("");
+            DataReader dataReader = new DataReader();
             BirthdateGenerator birthdateGenerator = new BirthdateGenerator();
             SQLDatabaseCreator sqlDatabaseCreator = new SQLDatabaseCreator();
+
             //Создаем файл и таблицу в PDF, указываем путь к нему
             String pdfOutputFilePath = "PersonalData.pdf";
             Document pdfDocument = new Document(PageSize.A3.rotate());
+            PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfOutputFilePath));
+            pdfDocument.open();
+            PdfPTable userDataPdfTable = new PdfPTable(userDataHeader.length);
+            userDataPdfTable.setWidthPercentage(100);//Задаем максимальную ширину полей
+
             //Задаем шрифт, поддерживающий кириллицу
             Font font = FontFactory.getFont("/fonts/arial.ttf",
                     BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 0.8f, Font.NORMAL, BaseColor.BLACK);
             BaseFont baseFont = font.getBaseFont();
             Font cyrillicFont = new Font(baseFont, 11);
-            PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfOutputFilePath));
-            pdfDocument.open();
-            PdfPTable userDataPdfTable = new PdfPTable(userDataHeader.length);
-            userDataPdfTable.setWidthPercentage(100);//Задаем максимальную ширину полей
 
             // Создаем шапку таблицы
             HSSFRow headRows = userDataSheet.createRow(0);
@@ -79,37 +73,43 @@ class FileDataGenerator {
 
                 HSSFRow bodyRows = userDataSheet.createRow(count + 1);
                 //Генерируем случайные значения
-                birthDate = birthdateGenerator.getBirthday();
-                userAge = birthdateGenerator.calculateAge(birthDate);
-                innValue = innGenerator.generateInn();
-                postCodeValue = random.nextInt(maxPostCode - minPostCode) + minPostCode;
-                houseNumber = random.nextInt(100);
-                apartmentNumber = random.nextInt(500);
+                Date birthDate = birthdateGenerator.getBirthday();
+                int userAge = birthdateGenerator.calculateAge(birthDate);
+                String innValue = innGenerator.generateInn();
+                int postCodeValue = random.nextInt(maxPostCode - minPostCode) + minPostCode;
+                int houseNumber = random.nextInt(100);
+                int apartmentNumber = random.nextInt(500);
 
-
+                //Рандомизируем пол
                 if (random.nextInt(100) > 50) {
                     for (String arrayIterator : maleUserData) {
-                        String value = dataReader.getData(arrayIterator);
-                        fileDataArray.add(Arrays.asList(maleUserData).indexOf(arrayIterator), value);
+                        String value = dataReader.getData(arrayIterator);//Генерируем данные для мужского пола
+                        fileDataArray.add(Arrays.asList(maleUserData).indexOf(arrayIterator), value);//Добавляем сгенерированные данные в массив
                     }
-                    fileDataArray.add(3, "М");
+                    fileDataArray.add(3, "М");//Устанавливаем мужской пол
                 }
                 else {
                     for (String arrayIterator : femaleUserData) {
-                        String value = dataReader.getData(arrayIterator);
+                        String value = dataReader.getData(arrayIterator);//Генерируем данные для женского пола
                         fileDataArray.add(Arrays.asList(femaleUserData).indexOf(arrayIterator), value);
                     }
-                    fileDataArray.add(3, "Ж");
+                    fileDataArray.add(3, "Ж");//Устанавливаем женский под
                 }
+
+                //Добавляем в массив ранее сгенерированные случайные данные
                 fileDataArray.add(3, String.valueOf(userAge));
                 fileDataArray.add(5, dateFormat.format(birthDate));
                 fileDataArray.add(6, innValue);
                 fileDataArray.add(7, String.valueOf(postCodeValue));
 
                 for (String arrayIterator : userAddressData) {
-                    String value = dataReader.getData(arrayIterator);
+                    String value = dataReader.getData(arrayIterator);//Генерируем данные адреса
                     fileDataArray.add((8 + Arrays.asList(userAddressData).indexOf(arrayIterator)), value);
                 }
+
+                //Добавляем в массив сгенерированные номера дома и квартиры
+                fileDataArray.add(12, String.valueOf(houseNumber));
+                fileDataArray.add(13, String.valueOf(apartmentNumber));
 
                 for (String arrayIterator : fileDataArray) {
                     String value = fileDataArray.get(fileDataArray.indexOf(arrayIterator));
@@ -117,10 +117,8 @@ class FileDataGenerator {
                     PdfPCell cellValue = new PdfPCell(new Paragraph(value, cyrillicFont));
                     userDataPdfTable.addCell(cellValue);
                 }
-                fileDataArray.add(12, String.valueOf(houseNumber));
-                fileDataArray.add(13, String.valueOf(apartmentNumber));
-                sqlDatabaseCreator.dbData(fileDataArray);
-                System.out.println("Done...");
+                sqlDatabaseCreator.dbData(fileDataArray);//Добавляем сгенерированные данные в БД
+                System.out.println("Данные сгенерированные из файлов были добавлены в БД");
                 userDataPdfTable.completeRow();
             }
             //Автоматически расширяем колонки до нужного размера
@@ -141,7 +139,7 @@ class FileDataGenerator {
             System.out.println("Excel файл создан. Путь: " + excelOutputFilePath);
 
         } catch (Throwable cause) {
-            cause.printStackTrace();
+            cause.printStackTrace();//Ловим исключения
         }
     }
 }

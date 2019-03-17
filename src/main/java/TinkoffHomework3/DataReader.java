@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Random;
 
 class DataReader {
-    private String inputFilePath;
     private Random dataRandom = new Random();
 
-    DataReader(String inputFilePath) {
-        this.inputFilePath = inputFilePath;
+    DataReader() {
     }
 
     String getData(String inputFilePath) {//На вход принимаем имя файла

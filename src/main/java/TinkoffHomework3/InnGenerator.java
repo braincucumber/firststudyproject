@@ -16,6 +16,7 @@ class InnGenerator {
         // Набираем массив из 9 случайных цифр
         for (int i = 0; i < innNumberArray.length; i++) {
             innNumberArray[i] = (innRandom.nextInt(10));
+            //noinspection StringConcatenationInLoop
             innNumber += innNumberArray[i];
         }
         // Подсчет первого контрольного числа
