@@ -9,7 +9,7 @@ public class DataBaseCreator {
     public static void main(String[] args) {
         try {
             Random random = new Random();
-            int userQuantity = random.nextInt(30);//Устанавливаем максимальное значение случайного числа пользьзователей
+            int userQuantity = random.nextInt(30);//Устанавливаем максимальное значение числа пользьзователей
             ApiDataGenerator apiDataGenerator = new ApiDataGenerator();
             SQLDatabaseGenerator sqlDatabaseGenerator = new SQLDatabaseGenerator();
 
